@@ -7,13 +7,20 @@
 
 <div id="app">
     <div v-if="!image">
-        <h2>Select an image</h2>
+        <label class="file-select">
+            <div class="select-button">
+                <span v-if="value">Selected File: {{value.name}}</span>
+                <span v-else>Select Your Image</span>
+            </div>
+        
         <input type="file" @change="onFileChange">
     </div>
     <div v-else>
         <img :src="image" />
         <button @click="removeImage">Remove image</button>
+        
     </div>
+</label>
 </div>
 
 <style>
@@ -27,9 +34,33 @@
     margin-bottom: 10px;
   }
   button {
-      width: 10%;
-      color:blue
+    color:black;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: coral;
+    border-radius: .3rem;
+    text-align: center;
+    width: 10%;
+    border: solid;
+    display: inline-block;
     
+  }
+  .file-select > .select-button{
+      color:black;
+      font-weight: bold;
+      padding: 1rem;
+      background-color: coral;
+      border-radius: .3rem;
+      text-align: center;
+      width: 10%;
+      border: solid;
+      display: inline-block;
+
+      
+
+  }
+  .file-select > input[type="file"] {
+      display: none;
   }
 </style>
 
