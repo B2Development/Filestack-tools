@@ -1,9 +1,6 @@
 <script src="https://unpkg.com/vue"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
-  rel="stylesheet"
-/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" rel="stylesheet" />
 
 <div id="app">
     <div v-if="!image">
@@ -12,84 +9,74 @@
                 <span v-if="value">Selected File: {{value.name}}</span>
                 <span v-else>Select Your Image</span>
             </div>
-        
-        <input type="file" @change="onFileChange">
+
+            <input type="file" @change="onFileChange">
     </div>
     <div v-else>
         <img :src="image" />
         <button @click="removeImage">Remove image</button>
-        
+
     </div>
-</label>
+    </label>
 </div>
 
 <style>
-  #app {
-    text-align: center;
-  }
-  img {
-    width: 30%;
-    margin: auto;
-    display: block;
-    margin-bottom: 10px;
-  }
-  button {
-    color:black;
-    font-weight: bold;
-    padding: 1rem;
-    background-color: coral;
-    border-radius: .3rem;
-    text-align: center;
-    width: 10%;
-    border: solid;
-    display: inline-block;
+    #app {
+        text-align: center;
+    }
+
+    img {
+        width: 30%;
+        margin: auto;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    button,
+    .file-select>.select-button {
+        color: black;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: coral;
+        border-radius: .3rem;
+        text-align: center;
+        width: 10%;
+        border: solid;
+        display: inline-block;
+    }
+
+    .file-select>input[type="file"] {
+        display: none;
+    }
     
-  }
-  .file-select > .select-button{
-      color:black;
-      font-weight: bold;
-      padding: 1rem;
-      background-color: coral;
-      border-radius: .3rem;
-      text-align: center;
-      width: 10%;
-      border: solid;
-      display: inline-block;
-
-      
-
-  }
-  .file-select > input[type="file"] {
-      display: none;
-  }
 </style>
 
 <script>
-  new Vue({
-    el: '#app',
-    data: {
-      image: ''
-    },
-    methods: {
-      onFileChange(e) {
-        var files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-          return;
-        this.createImage(files[0]);
-      },
-      createImage(file) {
-        var image = new Image();
-        var reader = new FileReader();
-        var vm = this;
-  
-        reader.onload = (e) => {
-          vm.image = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      },
-      removeImage: function (e) {
-        this.image = '';
-      }
-    }
-  })
+    new Vue({
+        el: '#app',
+        data: {
+            image: ''
+        },
+        methods: {
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                var image = new Image();
+                var reader = new FileReader();
+                var vm = this;
+
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+            removeImage: function (e) {
+                this.image = '';
+            }
+        }
+    })
 </script>
