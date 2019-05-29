@@ -1,0 +1,2349 @@
+<script src="https://unpkg.com/vue"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+<link
+        href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
+        rel="stylesheet"
+/>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500');
+
+    @keyframes spinAround {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(359deg);
+        }
+    }
+
+    @media screen and (max-width: 1383px) {
+        .transformation-column {
+            max-width: 100%;
+        }
+    }
+
+    .transformation-column .transformation-tabs {
+        margin: 0 -1px !important;
+    }
+
+    .transformation-column .transformation-tabs ul li.is-active a {
+        background: #f5f5f5 !important;
+    }
+
+    .transformation-column .transformation-box {
+        border-radius: 0 0 3px 3px !important;
+        background-image: url('https://assets.filestack.com/docs_v2/img/bg-box-triangles-bottom-left.png');
+        background-size: 500px 156px;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+
+    .transformation-column .uploader-box {
+        background-image: url('https://assets.filestack.com/docs_v2/img/bg-box-triangles-top-left.png'),
+        url('https://assets.filestack.com/docs_v2/img/bg-box-triangles-bottom-right.png');
+        background-size: 500px 156px, 500px 156px;
+        background-repeat: no-repeat, no-repeat;
+        background-position: top left, bottom right;
+    }
+
+    .transformation-column .transformation-url {
+        font-size: 1.125rem;
+        line-height: 2.5;
+        background-color: #f5f5f5;
+        margin: -1.25rem -1.25rem 2rem;
+        padding: 1.25rem;
+        word-break: break-all;
+    }
+
+    @media screen and (max-width: 768px) {
+        .transformation-column .transformation-url {
+            text-align: left !important;
+        }
+    }
+
+    .transformation-column .base-part {
+        color: #b5b5b5;
+    }
+
+    .transformation-column .apikey-part {
+        color: #4a8ce2;
+    }
+
+    .transformation-column .transformation-part {
+        color: #ef4a25;
+    }
+
+    .transformation-column .filehandle-part {
+        color: #73ae36;
+    }
+
+    .transformation-column .url-wrapper {
+        position: relative;
+        margin-top: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .transformation-column .url-wrapper {
+            word-break: break-word;
+        }
+    }
+
+    .transformation-column .url-label {
+        position: absolute;
+        display: inline-block;
+        margin: -10px 0 0;
+        text-align: left;
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .transformation-column .transformation-switcher li.is-active a {
+        background-color: #7a7a7a !important;
+        border-color: #7a7a7a !important;
+    }
+
+    .transformation-column .choose-transform {
+        margin-bottom: 1.5rem;
+    }
+
+    .transformation-column .set-params {
+        padding: 1.5rem 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .transformation-column .slider {
+        appearance: none;
+        width: 100%;
+        height: 0.125rem;
+        outline: none;
+        border-radius: 0.125rem;
+        background-color: #ef4a25;
+    }
+
+    .transformation-column .slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 1rem;
+        height: 1rem;
+        background-color: #fff;
+        border: 0.125rem solid #ef4a25;
+        border-radius: 1rem;
+        cursor: pointer;
+    }
+
+    .transformation-column .set-params .select,
+    .transformation-column .set-params .select > select {
+        width: 100%;
+    }
+
+    .transformation-column .set-params .column .column {
+        padding-top: 0.4375rem;
+    }
+
+    .transformation-column .ascii-canva pre {
+        background: transparent !important;
+        padding: 0;
+    }
+
+    .transformation-column .transformation-canva {
+        position: relative;
+    }
+
+    .transformation-column .transformation-canva .spinner {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .transformation-column .transformation-canva .spinner svg {
+        animation: rotate 1s linear infinite;
+        z-index: 2;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -25px 0 0 -25px;
+        width: 50px;
+        height: 50px;
+        background: transparent;
+    }
+
+    .transformation-column .transformation-canva .spinner svg .path {
+        stroke: #ef4a25;
+        stroke-linecap: round;
+        animation: dash 1.5s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 1, 150;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 90, 150;
+            stroke-dashoffset: -35;
+        }
+        100% {
+            stroke-dasharray: 90, 150;
+            stroke-dashoffset: -124;
+    .file-select>.select-button, button {
+        color: black;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: coral;
+        border-radius: .3rem;
+        text-align: center;
+        width: 10%;
+        border: solid;
+        display: inline-block;
+    }
+
+    /* hiding original button generated by input type */
+    .file-select>input[type="file"] {
+        display: none;
+    }
+
+</style>
+
+<div id="app">
+    <div class="columns">
+        <div class="column transformation-column">
+            <div class="tabs is-boxed transformation-tabs">
+                <ul>
+                    <li :class="{ 'is-active': checkActiveTab('borderEffects') }">
+                        <a @click="setActiveTab('borderEffects'); setRoundedCorners();"
+                        >Borders &amp; Effects</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('imageFilters') }">
+                        <a @click="setActiveTab('imageFilters'); setBlur();"
+                        >Image Filters</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('resizeFitAlign') }">
+                        <a @click="setActiveTab('resizeFitAlign'); setResize();"
+                        >Resize, Fit &amp; Align Images</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('imageCropping') }">
+                        <a @click="setActiveTab('imageCropping'); setCrop();"
+                        >Image Cropping</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('imageRotation') }">
+                        <a @click="setActiveTab('imageRotation'); setRotate();"
+                        >Image Rotation</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('watermarkImages') }">
+                        <a @click="setActiveTab('watermarkImages'); setWatermark();"
+                        >Watermark Images</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('imagesToAscii') }">
+                        <a @click="setActiveTab('imagesToAscii'); setAscii();"
+                        >Images to ASCII</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('urlScreenshots') }">
+                        <a @click="setActiveTab('urlScreenshots'); setUrl();"
+                        >URL Screenshots</a
+                        >
+                    </li>
+                    <li :class="{ 'is-active': checkActiveTab('collageImages') }">
+                        <a @click="setActiveTab('collageImages'); setCollage();"
+                        >Collage Images</a
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="box transformation-box">
+                <div class="transformation-url has-text-centered">
+          <span class="base-part url-wrapper">
+            <span class="url-label">Processing Api Url</span>
+            https://process.filestackapi.com/
+          </span>
+                    <span class="apikey-part url-wrapper">
+            <span class="url-label">Your Apikey</span> A1nL8omiAR8W7pHi3cotzz/
+          </span>
+                    <span class="transformation-part url-wrapper">
+            <span v-if="transformationUrl" class="url-label"
+            >This part is magic</span
+            >
+            {{ transformationUrl }}
+          </span>
+                    <span v-show="showFileHandle" class="filehandle-part url-wrapper">
+            <span class="url-label">File handle</span> {{ fileHandle }}
+          </span>
+                </div>
+                <div class="columns">
+                    <div v-if="checkActiveTab('borderEffects')" class="column is-7">
+                        <h3 class="subtitle is-4">Transformation Parameters</h3>
+                        <div class="tabs is-toggle is-fullwidth transformation-switcher">
+                            <ul>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('rounded') }"
+                                >
+                                    <a @click="setRoundedCorners()">
+                                        <span>Rounded corners</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('polaroid') }"
+                                >
+                                    <a @click="setPolaroid()">
+                                        <span>Polaroid</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('vignette') }"
+                                >
+                                    <a @click="setVignette()">
+                                        <span>Vignette</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('shadow') }"
+                                >
+                                    <a @click="setShadow()">
+                                        <span>Shadow</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('torn_edges') }"
+                                >
+                                    <a @click="setTornEdges()">
+                                        <span>Torn Edges</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('circle') }"
+                                >
+                                    <a @click="setCircle()">
+                                        <span>Circle</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-if="isActualTransformation('rounded')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="roundedRadius"
+                                        >Radius <span>(0-10000)</span></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    type="number"
+                                                    id="roundedRadius"
+                                                    min="0"
+                                                    max="10000"
+                                                    v-model="transformations.borderEffects.rounded.radius"
+                                                    @change="setRoundedCorners"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="roundedBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.rounded.background"
+                                                        @change="setRoundedCorners"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="roundedBlur">Blur</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="roundedBlur"
+                                                    min="0"
+                                                    max="20"
+                                                    v-model="transformations.borderEffects.rounded.blur"
+                                                    @change="setRoundedCorners"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('polaroid')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="polaroidRotation"
+                                        >Rotation <span>(0-359)</span></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    type="number"
+                                                    id="polaroidRotation"
+                                                    min="0"
+                                                    max="359"
+                                                    v-model="transformations.borderEffects.polaroid.rotate"
+                                                    @change="setPolaroid"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="polaroidColor">Color</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.polaroid.color"
+                                                        @change="setPolaroid"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="polaroidBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.polaroid.background"
+                                                        @change="setPolaroid"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('shadow')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowOpacity">Opacity</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="shadowOpacity"
+                                                    min="1"
+                                                    max="100"
+                                                    v-model="transformations.borderEffects.shadow.opacity"
+                                                    @change="setShadow"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowBlur">Blur</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    min="1"
+                                                    max="20"
+                                                    v-model="transformations.borderEffects.shadow.blur"
+                                                    @change="setShadow"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowVector">Vector</label>
+                                    </div>
+                                    <div class="control">
+                                        <div class="columns">
+                                            <div class="column">
+                                                <input
+                                                        type="number"
+                                                        id="shadowVector"
+                                                        class="input"
+                                                        v-model="transformations.borderEffects.shadow.vector[0]"
+                                                        min="1"
+                                                        max="100"
+                                                        @change="setShadow"
+                                                />
+                                            </div>
+                                            <div class="column">
+                                                <input
+                                                        type="number"
+                                                        class="input"
+                                                        v-model="transformations.borderEffects.shadow.vector[1]"
+                                                        min="1"
+                                                        max="100"
+                                                        @change="setShadow"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowColor">Color</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.shadow.color"
+                                                        @change="setShadow"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.shadow.background"
+                                                        @change="setShadow"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('vignette')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowOpacity">Amount</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="shadowOpacity"
+                                                    min="1"
+                                                    max="100"
+                                                    v-model="transformations.borderEffects.vignette.amount"
+                                                    @change="setVignette"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowColor">Color</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.vignette.blurmode"
+                                                        @change="setVignette"
+                                                >
+                                                    <option value="gaussian">Gaussian</option>
+                                                    <option value="linear">Linear</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="shadowBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.vignette.background"
+                                                        @change="setVignette"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('torn_edges')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="tornEdgesSpread"
+                                        >Spread <span>(1-10000)</span></label
+                                        >
+                                    </div>
+                                    <div class="control">
+                                        <div class="columns">
+                                            <div class="column">
+                                                <input
+                                                        type="number"
+                                                        id="shadowVector"
+                                                        class="input"
+                                                        v-model="transformations.borderEffects.torn_edges.spread[0]"
+                                                        min="1"
+                                                        max="10000"
+                                                        @change="setTornEdges"
+                                                />
+                                            </div>
+                                            <div class="column">
+                                                <input
+                                                        type="number"
+                                                        class="input"
+                                                        v-model="transformations.borderEffects.torn_edges.spread[1]"
+                                                        min="1"
+                                                        max="10000"
+                                                        @change="setTornEdges"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="tornEdgesBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.torn_edges.background"
+                                                        @change="setTornEdges"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('circle')" class="set-params">
+                            <div class="columns">
+                                <div class="column is-4">
+                                    <div class="field">
+                                        <label class="label" for="circleBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.borderEffects.circle.background"
+                                                        @change="setCircle"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('imageFilters')" class="column is-7">
+                        <h3 class="subtitle is-4">Transformation Parameters</h3>
+                        <div class="tabs is-toggle is-fullwidth transformation-switcher">
+                            <ul>
+                                <li :class="{ 'is-active': checkActiveTransformation('blur') }">
+                                    <a @click="setBlur()">
+                                        <span>Blur</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('sharpen') }"
+                                >
+                                    <a @click="setSharpen()">
+                                        <span>Sharpen</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('monochrome') }"
+                                >
+                                    <a @click="setMonochrome()">
+                                        <span>Mono</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('negative') }"
+                                >
+                                    <a @click="setNegative()">
+                                        <span>Negative</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('black_white') }"
+                                >
+                                    <a @click="setBlackWhite()">
+                                        <span>B & W</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('sepia') }"
+                                >
+                                    <a @click="setSepia()">
+                                        <span>Sepia</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('pixelate') }"
+                                >
+                                    <a @click="setPixelate()">
+                                        <span>Pixelate</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('oil_paint') }"
+                                >
+                                    <a @click="setOilPaint()">
+                                        <span>Oil</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('modulate') }"
+                                >
+                                    <a @click="setModulate()">
+                                        <span>Modulate</span>
+                                    </a>
+                                </li>
+                                <li
+                                        :class="{ 'is-active': checkActiveTransformation('partial') }"
+                                >
+                                    <a @click="setPartial()">
+                                        <span>Partial</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-if="isActualTransformation('blur')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="blurAmount">Amount</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="blurAmount"
+                                                    min="1"
+                                                    max="20"
+                                                    v-model="transformations.imageFilters.blur.amount"
+                                                    @change="setBlur"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('sharpen')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="sharpenAmount">Amount</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="sharpenAmount"
+                                                    min="1"
+                                                    max="20"
+                                                    v-model="transformations.imageFilters.sharpen.amount"
+                                                    @change="setSharpen"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('monochrome')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="notification">
+                                        Monochrome requires no additional parameters. It is simply
+                                        called like this: <code>monochrome</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('negative')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="notification">
+                                        The image returned by this transformation creates a negative
+                                        image by portraying the lightest area as the darkest and the
+                                        darkest areas as the lightest. The negative task requires no
+                                        additional parameters. It is simply called like this:
+                                        <code>negative</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                                v-if="isActualTransformation('black_white')"
+                                class="set-params"
+                        >
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="blackWhiteThreshold"
+                                        >Amount</label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="blackWhiteThreshold"
+                                                    min="0"
+                                                    max="100"
+                                                    v-model="transformations.imageFilters.black_white.threshold"
+                                                    @change="setBlackWhite"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('sepia')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="sepiaTone">Tone</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="sepiaTone"
+                                                    min="0"
+                                                    max="100"
+                                                    v-model="transformations.imageFilters.sepia.tone"
+                                                    @change="setSepia"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('pixelate')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="pixelateAmount">Amount</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="pixelateAmount"
+                                                    min="0"
+                                                    max="100"
+                                                    v-model="transformations.imageFilters.pixelate.amount"
+                                                    @change="setPixelate"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('oil_paint')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="oilPaintAmount">Amount</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    class="slider"
+                                                    id="oilPaintAmount"
+                                                    min="0"
+                                                    max="10"
+                                                    v-model="transformations.imageFilters.oil_paint.amount"
+                                                    @change="setOilPaint"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('modulate')" class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="modulateBrightness"
+                                        >Brightness <span>(1-10000)</span></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    id="modulateBrightness"
+                                                    class="input"
+                                                    v-model="transformations.imageFilters.modulate.brightness"
+                                                    min="1"
+                                                    max="10000"
+                                                    @change="setModulate"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="modulateHue"
+                                        >Hue <span>(1-359)</span></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    id="modulateHue"
+                                                    class="input"
+                                                    v-model="transformations.imageFilters.modulate.hue"
+                                                    min="1"
+                                                    max="359"
+                                                    @change="setModulate"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="modulateSaturation"
+                                        >Saturation <span>(1-10000)</span></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    id="modulateSaturation"
+                                                    class="input"
+                                                    v-model="transformations.imageFilters.modulate.saturation"
+                                                    min="1"
+                                                    max="10000"
+                                                    @change="setModulate"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="isActualTransformation('partial')" class="set-params">
+                            <div class="columns">
+                                <div class="column is-8">
+                                    <div>
+                                        <label class="label">Area</label>
+
+                                        <div class="columns">
+                                            <div class="column">
+                                                <div class="field is-horizontal">
+                                                    <div class="field-label is-normal">
+                                                        <label class="label" for="partialAreaX">x</label>
+                                                    </div>
+                                                    <div class="field-body">
+                                                        <div class="control">
+                                                            <input
+                                                                    type="number"
+                                                                    id="partialAreaX"
+                                                                    class="input"
+                                                                    v-model="transformations.imageFilters.partial.objects[0]"
+                                                                    min="1"
+                                                                    max="10000"
+                                                                    @change="setPartial"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column">
+                                                <div class="field is-horizontal">
+                                                    <div class="field-label is-normal">
+                                                        <label class="label" for="partialAreaY">y</label>
+                                                    </div>
+                                                    <div class="field-body">
+                                                        <div class="control">
+                                                            <input
+                                                                    type="number"
+                                                                    id="partialAreaY"
+                                                                    class="input"
+                                                                    v-model="transformations.imageFilters.partial.objects[1]"
+                                                                    min="1"
+                                                                    max="10000"
+                                                                    @change="setPartial"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column">
+                                                <div class="field is-horizontal">
+                                                    <div class="field-label is-normal">
+                                                        <label class="label" for="partialAreaW">w</label>
+                                                    </div>
+                                                    <div class="field-body">
+                                                        <div class="control">
+                                                            <input
+                                                                    type="number"
+                                                                    id="partialAreaW"
+                                                                    class="input"
+                                                                    v-model="transformations.imageFilters.partial.objects[2]"
+                                                                    min="1"
+                                                                    max="10000"
+                                                                    @change="setPartial"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column">
+                                                <div class="field is-horizontal">
+                                                    <div class="field-label is-normal">
+                                                        <label class="label" for="partialAreaH">h</label>
+                                                    </div>
+                                                    <div class="field-body">
+                                                        <div class="control">
+                                                            <input
+                                                                    type="number"
+                                                                    id="partialAreaH"
+                                                                    class="input"
+                                                                    v-model="transformations.imageFilters.partial.objects[3]"
+                                                                    min="1"
+                                                                    max="10000"
+                                                                    @change="setPartial"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="partialType">Type</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.imageFilters.partial.type"
+                                                        @change="setPartial"
+                                                >
+                                                    <option value="oval">Oval</option>
+                                                    <option value="rect">Rectangle</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="partialAmount">Amount</label>
+                                        <div class="control">
+                                            <div class="columns">
+                                                <div class="column is-9">
+                                                    <input
+                                                            type="range"
+                                                            id="partialAmount"
+                                                            class="slider"
+                                                            v-model="transformations.imageFilters.partial.amount"
+                                                            min="2"
+                                                            max="20"
+                                                            @change="setPartial"
+                                                    />
+                                                </div>
+                                                <div class="column">
+                                                    <div class="field">
+                                                        <div class="control">
+                                                            <div class="select">
+                                                                <select
+                                                                        v-model="transformations.imageFilters.partial.cover"
+                                                                        @change="setPartial"
+                                                                >
+                                                                    <option value="pixelate">Pixelate</option>
+                                                                    <option value="blur">Blur</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="partialBlur">Edge Blur</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    id="partialBlur"
+                                                    class="slider"
+                                                    v-model="transformations.imageFilters.partial.blur"
+                                                    min="0"
+                                                    max="20"
+                                                    @change="setPartial"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('resizeFitAlign')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="resizeWidth">Width</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="resizeWidth"
+                                                    type="number"
+                                                    v-model="transformations.resize.width"
+                                                    @change="setResize"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="resizeHeight">Height</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="resizeHeight"
+                                                    type="number"
+                                                    v-model="transformations.resize.height"
+                                                    @change="setResize"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="resizeFit">Fit</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.resize.fit"
+                                                        @change="setResize"
+                                                >
+                                                    <option value="clip">Clip</option>
+                                                    <option value="crop">Crop</option>
+                                                    <option value="scale">Scale</option>
+                                                    <option value="max">Max</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="resizeAlign">Align</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.resize.align"
+                                                        @change="setResize"
+                                                >
+                                                    <option value="center">Center</option>
+                                                    <option value="top">Top</option>
+                                                    <option value="bottom">Bottom</option>
+                                                    <option value="left">Left</option>
+                                                    <option value="right">Right</option>
+                                                    <option value="[top,left]">[top,left]</option>
+                                                    <option value="[top,right]">[top,right]</option>
+                                                    <option value="[bottom,left]">[bottom,left]</option>
+                                                    <option value="[bottom,right]">[bottom,right]</option>
+                                                    <option value="faces">Faces</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('imageCropping')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="cropX">X-Axis</label>
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="1"
+                                                    max="600"
+                                                    v-model="transformations.crop.dim[0]"
+                                                    @change="setCrop"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="cropY">Y-Axis</label>
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="1"
+                                                    max="600"
+                                                    v-model="transformations.crop.dim[1]"
+                                                    @change="setCrop"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="cropW">Width</label>
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="1"
+                                                    max="600"
+                                                    v-model="transformations.crop.dim[2]"
+                                                    @change="setCrop"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="cropH">Height</label>
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="1"
+                                                    max="600"
+                                                    v-model="transformations.crop.dim[3]"
+                                                    @change="setCrop"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('imageRotation')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="rotateDeg"
+                                        >Rotate (0 - 359)</label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="0"
+                                                    max="359"
+                                                    v-model="transformations.rotate.deg"
+                                                    @change="setRotate"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="rotateBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.rotate.background"
+                                                        @change="setRotate"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="rotateMirroring">Mirroring</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.rotate.mirroring"
+                                                        @change="setRotate"
+                                                >
+                                                    <option value="">None</option>
+                                                    <option value="/flip">Flip</option>
+                                                    <option value="/flop">Flop</option>
+                                                    <option value="/flip/flop">Flip Flop</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('watermarkImages')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="watermarkSize"
+                                        >Size (1 - 500 %)</label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    type="number"
+                                                    class="input"
+                                                    min="1"
+                                                    max="500"
+                                                    v-model="transformations.watermark.size"
+                                                    @change="setWatermark"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="watermarkPosition"
+                                        >Position</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.watermark.position"
+                                                        @change="setWatermark"
+                                                >
+                                                    <option value=",position:[top,left]"
+                                                    >Top, Left
+                                                    </option
+                                                    >
+                                                    <option value=",position:[top,center]"
+                                                    >Top, Center
+                                                    </option
+                                                    >
+                                                    <option value=",position:[top,right]"
+                                                    >Top, Right
+                                                    </option
+                                                    >
+                                                    <option value=",position:[middle,left]"
+                                                    >Middle, Left
+                                                    </option
+                                                    >
+                                                    <option value="">Center</option>
+                                                    <option value=",position:[middle,right]"
+                                                    >Middle, Right
+                                                    </option
+                                                    >
+                                                    <option value=",position:[bottom,left]"
+                                                    >Bottom, Left
+                                                    </option
+                                                    >
+                                                    <option value=",position:[bottom,center]"
+                                                    >Bottom, Center
+                                                    </option
+                                                    >
+                                                    <option value=",position:[bottom,right]"
+                                                    >Bottom, Right
+                                                    </option
+                                                    >
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('imagesToAscii')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="asciiColored">Colored</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.ascii.colored"
+                                                        @change="toggleAsciiColored($event.target.value)"
+                                                >
+                                                    <option value="true">True</option>
+                                                    <option value="false">False</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="asciiReversed">Reverse</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.ascii.reverse"
+                                                        @change="toggleAsciiReversed($event.target.value)"
+                                                >
+                                                    <option value="true">True</option>
+                                                    <option value="false">False</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="asciiBackground"
+                                        >Background</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.ascii.background"
+                                                        @change="setAscii"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="asciiForeground"
+                                        >Foreground</label
+                                        >
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.ascii.foreground"
+                                                        @change="toggleAsciiForeground($event.target.value)"
+                                                >
+                                                    <option value="">None</option>
+                                                    <option value=",foreground:black">Black</option>
+                                                    <option value=",foreground:white">White</option>
+                                                    <option value=",foreground:green">Green</option>
+                                                    <option value=",foreground:F1543A"
+                                                    >Custom (#F1543A)
+                                                    </option
+                                                    >
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('urlScreenshots')" class="column is-7">
+                        <div class="set-params">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlAgent">Agent</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.urlscreenshot.agent"
+                                                        @change="setUrl"
+                                                >
+                                                    <option value="desktop">Desktop</option>
+                                                    <option value="mobile">Mobile</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlMode">Mode</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.urlscreenshot.mode"
+                                                        @change="toggleUrlHeight($event.target.value)"
+                                                >
+                                                    <option value="window">Window</option>
+                                                    <option value="all">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlLink">URL</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.urlscreenshot.url"
+                                                        @change="setUrl"
+                                                >
+                                                    <option value="https://www.filestack.com"
+                                                    >https://www.filestack.com
+                                                    </option
+                                                    >
+                                                    <option value="https://www.assembla.com"
+                                                    >https://www.assembla.com
+                                                    </option
+                                                    >
+                                                    <option value="https://www.chargify.com"
+                                                    >https://www.chargify.com
+                                                    </option
+                                                    >
+                                                    <option value="https://qualaroo.com"
+                                                    >https://qualaroo.com
+                                                    </option
+                                                    >
+                                                    <option value="http://personalcrm.followup.cc"
+                                                    >http://personalcrm.followup.cc
+                                                    </option
+                                                    >
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlDelay">Delay (0-10000)</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="urlDelay"
+                                                    type="number"
+                                                    min="0"
+                                                    max="10000"
+                                                    v-model="transformations.urlscreenshot.delay"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlWidth">Width</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="urlWidth"
+                                                    type="number"
+                                                    v-model="transformations.urlscreenshot.width"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="urlHeight"
+                                        >Height
+                                            <span v-if="transformations.urlscreenshot.hideHeight"
+                                            >(Only applicable width mode:window)</span
+                                            ></label
+                                        >
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="urlHeight"
+                                                    type="number"
+                                                    v-model="transformations.urlscreenshot.height"
+                                                    :disabled="transformations.urlscreenshot.hideHeight"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="checkActiveTab('collageImages')" class="column is-7">
+                        <div class="set-params">
+                            <h3 class="subtitle is-4">Transformation Parameters</h3>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="collageWidth">Width</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="collageWidth"
+                                                    type="number"
+                                                    v-model="transformations.collage.width"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="collageHeight">Height</label>
+                                        <div class="control">
+                                            <input
+                                                    class="input"
+                                                    id="collageHeight"
+                                                    type="number"
+                                                    v-model="transformations.collage.height"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="collageFit">Fit</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.collage.fit"
+                                                        @change="setCollage"
+                                                >
+                                                    <option value="auto">Auto</option>
+                                                    <option value="crop">Crop</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="collageColor">Color</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select
+                                                        v-model="transformations.collage.color"
+                                                        @change="setCollage"
+                                                >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="green">Green</option>
+                                                    <option value="F1543A">Custom (#F1543A)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label" for="collageMargin">Margin</label>
+                                        <div class="control">
+                                            <input
+                                                    type="range"
+                                                    id="collageMargin"
+                                                    class="slider"
+                                                    v-model="transformations.collage.margin"
+                                                    min="1"
+                                                    max="20"
+                                                    @change="setCollage"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column is-5">
+                        <div class="transformation-canva">
+                            <div v-if="requestIsLoading" class="spinner">
+                                <svg class="spinner" viewBox="0 0 50 50">
+                                    <circle
+                                            class="path"
+                                            cx="25"
+                                            cy="25"
+                                            r="20"
+                                            fill="none"
+                                            stroke-width="5"
+                                    ></circle>
+                                </svg>
+                            </div>
+                            <div id="upload"></div>
+                            <div v-if="!image">
+                                <label class="file-select">
+                                    <div class="select-button">
+                                        <span> Upload Image </span>
+                                    </div>
+
+                                    <input type="file" @change="onFileChange">
+                                </label>
+                            </div>
+                            <div v-else>
+                                <img :src="image" />
+                                <button @click="removeImage">Remove image</button>
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                            <img
+                                    v-if="!checkActiveTab('imagesToAscii')"
+                                    :src="fileUrl"
+                                    alt=""
+                             src=""/>
+                            <div
+                                    class="ascii-canva"
+                                    v-else
+                                    v-html="asciiSource"
+                                    :style="{ 'background': transformations.ascii.background }"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                actualTab: 'borderEffects',
+                actualTransformation: 'rounded',
+                /*             filestack, */
+                fileHandle: 'zTaoZCLHSaaRDEXBcdfJ',
+                showFileHandle: true,
+                fileUrl:
+                    'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/zTaoZCLHSaaRDEXBcdfJ',
+                transformationUrl: '',
+                asciiSource: '',
+                requestIsLoading: false,
+                transformations: {
+                    borderEffects: {
+                        rounded: {
+                            radius: 20,
+                            background: 'white',
+                            blur: 0,
+                        },
+                        polaroid: {
+                            rotate: 15,
+                            color: 'white',
+                            background: 'black',
+                        },
+                        vignette: {
+                            amount: 50,
+                            blurmode: 'gaussian',
+                            background: 'black',
+                        },
+                        shadow: {
+                            opacity: 50,
+                            blur: 5,
+                            vector: [5, 5],
+                            color: 'black',
+                            background: 'white',
+                        },
+                        torn_edges: {
+                            spread: [15, 20],
+                            background: 'white',
+                        },
+                        circle: {
+                            background: 'white',
+                        },
+                    },
+                    imageFilters: {
+                        blur: {
+                            amount: 5,
+                        },
+                        sharpen: {
+                            amount: 10,
+                        },
+                        black_white: {
+                            threshold: 46,
+                        },
+                        sepia: {
+                            tone: 80,
+                        },
+                        pixelate: {
+                            amount: 10,
+                        },
+                        oil_paint: {
+                            amount: 7,
+                        },
+                        modulate: {
+                            brightness: 100,
+                            hue: 240,
+                            saturation: 200,
+                        },
+                        partial: {
+                            cover: 'pixelate',
+                            objects: [200, 170, 220, 210],
+                            type: 'oval',
+                            amount: 10,
+                            blur: 3,
+                        },
+                    },
+                    resize: {
+                        width: 250,
+                        height: 170,
+                        fit: 'clip',
+                        align: 'center',
+                    },
+                    crop: {
+                        dim: [200, 170, 220, 210],
+                    },
+                    rotate: {
+                        deg: 45,
+                        background: 'white',
+                        mirroring: '',
+                    },
+                    watermark: {
+                        size: 30,
+                        position: '',
+                    },
+                    ascii: {
+                        colored: true,
+                        reverse: true,
+                        background: 'black',
+                        foreground: '',
+                    },
+                    urlscreenshot: {
+                        url: 'https://www.filestack.com',
+                        agent: 'desktop',
+                        mode: 'window',
+                        width: 540,
+                        height: 365,
+                        delay: 0,
+                        hideHeight: false,
+                    },
+                    collage: {
+                        files: [
+                            'EwSPzJdLRfumGeDXNGMR',
+                            'oEEPPkYIQeCQm1OXNaf5',
+                            '2KnZG69wTfKYJoGHjV1H',
+                            'oxk8BDEdRHm1I0xPtce6',
+                            'ejTlmZNmSIOt5aOjAEml',
+                            '3sNxvNOOTJKZ8cigON4w',
+                        ],
+                        width: 540,
+                        height: 365,
+                        fit: 'crop',
+                        color: 'white',
+                        margin: 5,
+                    },
+                },
+            };
+        },
+        methods: {
+            setActiveTab(val) {
+                this.actualTab = val;
+                this.clearTransformations();
+            },
+            checkActiveTab(val) {
+                return this.actualTab === val;
+            },
+            checkActiveTransformation(val) {
+                return this.actualTransformation === val;
+            },
+            openPicker() {
+                const apikey = 'A1nL8omiAR8W7pHi3cotzz';
+                const client = filestack.init(apikey);
+                const options = {
+                    accept: 'image/*',
+                    minFiles: 1,
+                    maxFiles: 1,
+                    maxSize: 100 * 1024 * 1024,
+                };
+                const setResults = res => {
+                    if (res.filesUploaded.length > 0) {
+                        this.fileHandle = res.filesUploaded[0].handle;
+                        this.clearTransformations();
+                    }
+                };
+                return client.pick(options).then(setResults);
+            },
+            openMultiplePicker() {
+                const apikey = 'A1nL8omiAR8W7pHi3cotzz';
+                const client = filestack.init(apikey);
+                const options = {
+                    accept: 'image/*',
+                    minFiles: 1,
+                    maxFiles: 6,
+                    maxSize: 100 * 1024 * 1024,
+                };
+                const setResults = res => {
+                    for (var i = 0; i < res.filesUploaded.length; i++) {
+                        this.transformations.collage.files[i] = res.filesUploaded[i].handle;
+                    }
+                    this.setCollage();
+                };
+                return client.pick(options).then(setResults);
+            },
+            makeRequest(val, noFileHandle) {
+                this.transformationUrl = val;
+                this.requestIsLoading = true;
+                if (noFileHandle) {
+                    this.fileUrl =
+                        'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/' + val;
+                    this.showFileHandle = false;
+                } else {
+                    this.fileUrl =
+                        'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/' +
+                        val +
+                        this.fileHandle;
+                    this.showFileHandle = true;
+                }
+                this.$http.get(this.fileUrl).then(
+                    function () {
+                        this.requestIsLoading = false;
+                    },
+                    function () {
+                        this.requestIsLoading = false;
+                        this.fileUrl =
+                            'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/hLVaDmCSSCd547bIl55A';
+                        return;
+                    }
+                );
+            },
+            makeAsciiRequest(val) {
+                this.transformationUrl = val;
+                this.requestIsLoading = true;
+                this.fileUrl =
+                    'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/' +
+                    val +
+                    this.fileHandle;
+                this.$http.get(this.fileUrl).then(
+                    response => {
+                        this.requestIsLoading = false;
+                        this.asciiSource = response.body;
+                    },
+                    response => {
+                        this.requestIsLoading = false;
+                        this.fileUrl =
+                            'https://process.filestackapi.com/A1nL8omiAR8W7pHi3cotzz/hLVaDmCSSCd547bIl55A';
+                        return;
+                    }
+                );
+            },
+            isActualTransformation(val) {
+                return this.actualTransformation === val;
+            },
+            setRoundedCorners() {
+                var transformationObject = this.transformations.borderEffects.rounded;
+                var newValue =
+                    'rounded_corners=radius:' +
+                    transformationObject.radius +
+                    ',background:' +
+                    transformationObject.background +
+                    ',blur:' +
+                    transformationObject.blur +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'rounded';
+            },
+            setPolaroid() {
+                var transformationObject = this.transformations.borderEffects.polaroid;
+                var newValue =
+                    'polaroid=rotate:' +
+                    transformationObject.rotate +
+                    ',color:' +
+                    transformationObject.color +
+                    ',background:' +
+                    transformationObject.background +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'polaroid';
+            },
+            setShadow() {
+                var transformationObject = this.transformations.borderEffects.shadow;
+                var newValue =
+                    'shadow=opacity:' +
+                    transformationObject.opacity +
+                    ',blur:' +
+                    transformationObject.blur +
+                    ',vector:[' +
+                    transformationObject.vector +
+                    '],color:' +
+                    transformationObject.color +
+                    ',background:' +
+                    transformationObject.background +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'shadow';
+            },
+            setVignette() {
+                var transformationObject = this.transformations.borderEffects.vignette;
+                var newValue =
+                    'vignette=amount:' +
+                    transformationObject.amount +
+                    ',blurmode:' +
+                    transformationObject.blurmode +
+                    ',background:' +
+                    transformationObject.background +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'vignette';
+            },
+            setTornEdges() {
+                var transformationObject = this.transformations.borderEffects
+                    .torn_edges;
+                var newValue =
+                    'torn_edges=spread:[' +
+                    transformationObject.spread +
+                    '],background:' +
+                    transformationObject.background +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'torn_edges';
+            },
+            setCircle() {
+                var transformationObject = this.transformations.borderEffects.circle;
+                var newValue =
+                    'circle=background:' + transformationObject.background + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'circle';
+            },
+            setBlur() {
+                var transformationObject = this.transformations.imageFilters.blur;
+                var newValue = 'blur=amount:' + transformationObject.amount + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'blur';
+            },
+            setSharpen() {
+                var transformationObject = this.transformations.imageFilters.sharpen;
+                var newValue = 'sharpen=amount:' + transformationObject.amount + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'sharpen';
+            },
+            setMonochrome() {
+                var newValue = 'monochrome/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'monochrome';
+            },
+            setNegative() {
+                var newValue = 'negative/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'negative';
+            },
+            setBlackWhite() {
+                var transformationObject = this.transformations.imageFilters
+                    .black_white;
+                var newValue =
+                    'blackwhite=threshold:' + transformationObject.threshold + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'black_white';
+            },
+            setSepia() {
+                var transformationObject = this.transformations.imageFilters.sepia;
+                var newValue = 'sepia=tone:' + transformationObject.tone + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'sepia';
+            },
+            setPixelate() {
+                var transformationObject = this.transformations.imageFilters.pixelate;
+                var newValue = 'pixelate=amount:' + transformationObject.amount + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'pixelate';
+            },
+            setOilPaint() {
+                var transformationObject = this.transformations.imageFilters.oil_paint;
+                var newValue = 'oil_paint=amount:' + transformationObject.amount + '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'oil_paint';
+            },
+            setModulate() {
+                var transformationObject = this.transformations.imageFilters.modulate;
+                var newValue =
+                    'modulate=brightness:' +
+                    transformationObject.brightness +
+                    ',hue:' +
+                    transformationObject.hue +
+                    ',saturation:' +
+                    transformationObject.saturation +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'modulate';
+            },
+            setPartial() {
+                var transformationObject = this.transformations.imageFilters.partial;
+                var newValue =
+                    'partial_' +
+                    transformationObject.cover +
+                    '=objects:[[' +
+                    transformationObject.objects[0] +
+                    ',' +
+                    transformationObject.objects[1] +
+                    ',' +
+                    transformationObject.objects[2] +
+                    ',' +
+                    transformationObject.objects[3] +
+                    ']],type:' +
+                    transformationObject.type +
+                    ',amount:' +
+                    transformationObject.amount +
+                    ',blur:' +
+                    transformationObject.blur +
+                    '/';
+                this.makeRequest(newValue);
+                this.actualTransformation = 'partial';
+            },
+            setResize() {
+                var transformationObject = this.transformations.resize;
+                var newValue =
+                    'resize=width:' +
+                    transformationObject.width +
+                    ',height:' +
+                    transformationObject.height +
+                    ',fit:' +
+                    transformationObject.fit +
+                    ',align:' +
+                    transformationObject.align +
+                    '/';
+                this.makeRequest(newValue);
+            },
+            setCrop() {
+                var transformationObject = this.transformations.crop;
+                var newValue =
+                    'crop=dim:[' +
+                    transformationObject.dim[0] +
+                    ',' +
+                    transformationObject.dim[1] +
+                    ',' +
+                    transformationObject.dim[2] +
+                    ',' +
+                    transformationObject.dim[3] +
+                    ']/';
+                this.makeRequest(newValue);
+            },
+            setRotate() {
+                var transformationObject = this.transformations.rotate;
+                var newValue =
+                    'rotate=deg:' +
+                    transformationObject.deg +
+                    ',background:' +
+                    transformationObject.background +
+                    transformationObject.mirroring +
+                    '/';
+                this.makeRequest(newValue);
+            },
+            setWatermark() {
+                var transformationObject = this.transformations.watermark;
+                var newValue =
+                    'watermark=file:IRlKtRR8Tuqrqgu40nA9,size:' +
+                    transformationObject.size +
+                    transformationObject.position +
+                    '/';
+                this.makeRequest(newValue);
+            },
+            setAscii() {
+                var transformationObject = this.transformations.ascii;
+                var newValue =
+                    'ascii=colored:' +
+                    transformationObject.colored.toString() +
+                    ',reverse:' +
+                    transformationObject.reverse.toString() +
+                    ',background:' +
+                    transformationObject.background +
+                    transformationObject.foreground +
+                    ',size:42/';
+                this.makeAsciiRequest(newValue);
+            },
+            toggleAsciiColored(val) {
+                var value = val;
+                if (value === 'true') {
+                    this.transformations.ascii.colored = true;
+                    this.transformations.ascii.foreground = '';
+                } else {
+                    this.transformations.ascii.colored = false;
+                }
+                this.setAscii();
+            },
+            toggleAsciiReversed(val) {
+                var value = val;
+                if (value === 'true') {
+                    this.transformations.ascii.reverse = true;
+                } else {
+                    this.transformations.ascii.reverse = false;
+                }
+                this.setAscii();
+            },
+            toggleAsciiForeground(val) {
+                var value = val;
+                switch (value) {
+                    case ',foreground:white':
+                        this.transformations.ascii.foreground = ',foreground:white';
+                        this.transformations.ascii.colored = false;
+                        break;
+                    case ',foreground:black':
+                        this.transformations.ascii.foreground = ',foreground:black';
+                        this.transformations.ascii.colored = false;
+                        break;
+                    case ',foreground:green':
+                        this.transformations.ascii.foreground = ',foreground:green';
+                        this.transformations.ascii.colored = false;
+                        break;
+                    case ',foreground:F1543A':
+                        this.transformations.ascii.foreground = ',foreground:F1543A';
+                        this.transformations.ascii.colored = false;
+                        break;
+                    default:
+                        this.transformations.ascii.foreground = '';
+                }
+                this.setAscii();
+            },
+            setUrl() {
+                var transformationObject = this.transformations.urlscreenshot;
+                var newValue =
+                    'urlscreenshot=agent:' +
+                    transformationObject.agent +
+                    ',mode:' +
+                    transformationObject.mode +
+                    ',width:' +
+                    transformationObject.width +
+                    ',height:' +
+                    transformationObject.height +
+                    ',delay:' +
+                    transformationObject.delay +
+                    '/' +
+                    transformationObject.url +
+                    '/';
+                this.makeRequest(newValue, true);
+            },
+            toggleUrlHeight(val) {
+                var value = val;
+                if (value === 'all') {
+                    this.transformations.urlscreenshot.hideHeight = true;
+                } else {
+                    this.transformations.urlscreenshot.hideHeight = false;
+                }
+                this.setUrl();
+            },
+            setCollage() {
+                var transformationObject = this.transformations.collage;
+                var newValue =
+                    'collage=files:[' +
+                    transformationObject.files[0] +
+                    ',' +
+                    transformationObject.files[1] +
+                    ',' +
+                    transformationObject.files[2] +
+                    ',' +
+                    transformationObject.files[3] +
+                    ',' +
+                    transformationObject.files[4] +
+                    ',' +
+                    transformationObject.files[5] +
+                    '],width:' +
+                    transformationObject.width +
+                    ',height:' +
+                    transformationObject.height +
+                    ',fit:' +
+                    transformationObject.fit +
+                    ',color:' +
+                    transformationObject.color +
+                    ',margin:' +
+                    transformationObject.margin +
+                    '/';
+                this.makeRequest(newValue);
+            },
+            clearTransformations() {
+                var newValue = '';
+                this.makeRequest(newValue);
+            },
+        },
+        mounted() {
+            this.setRoundedCorners();
+        },
+    });
+
+    var upload = new Vue({
+        el: '#app',
+        data: {
+            image: ''
+        },
+        methods: {
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                var image = new Image();
+                var reader = new FileReader();
+                var vm = this;
+
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+            removeImage: function (e) {
+                this.image = '';
+            }
+        }
+    })
+</script>
