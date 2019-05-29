@@ -5,18 +5,18 @@
 <div id="app">
     <div v-if="!image">
         <label class="file-select">
-            <div>
+            <div class="select-button">
                 <span> Upload Image </span>
             </div>
 
             <input type="file" @change="onFileChange">
+        </label>
     </div>
     <div v-else>
         <img :src="image" />
         <button @click="removeImage">Remove image</button>
 
     </div>
-    </label>
 </div>
 
 <style>
