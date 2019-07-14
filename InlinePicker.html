@@ -6,23 +6,22 @@
 <div id="inline" style="width:600px;height:500px;padding:20px;"></div>
 <script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js">
 
-  document.addEventListener('click', function () {
-    const apikey = 'Ae4imGQj1Tgmc1sMsNhoOz';
-    const client = filestack.init(apikey);
-    const options = {
-      displayMode: 'inline',
-      container: '#inline',
-      maxFiles: 20,
-      uploadInBackground: false,
-      onUploadDone: (res) => console.log(res),
-    };
-    const picker = client.picker(options);
-    const openBtn = document.getElementById('open');
-    const closeBtn = document.getElementById('close');
-    openBtn.addEventListener('click', () => picker.open());
-    closeBtn.addEventListener('click', () => picker.close());
-  });
-
+    window.addEventListener('DOMContentLoaded', function () {
+        const apikey = 'Ae4imGQj1Tgmc1sMsNhoOz';
+        const client = filestack.init(apikey);
+        const options = {
+            displayMode: 'inline',
+            container: '#inline',
+            maxFiles: 20,
+            uploadInBackground: false,
+            onUploadDone: (res) => console.log(res),
+        };
+        const picker = client.picker(options);
+        const openBtn = document.getElementById('open');
+        const closeBtn = document.getElementById('close');
+        openBtn.addEventListener('click', () => picker.open());
+        closeBtn.addEventListener('click', () => picker.close());
+    });
 </script>
 </body>
 </html>
