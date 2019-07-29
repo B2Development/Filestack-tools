@@ -5,17 +5,19 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" rel="stylesheet" />
 
-<div id="app">
+<div id="inline">
   <div v-if="!image">
     <button @click="selectImage">Select Image</button>
   </div>
-  <div v-else>
-    <img :src="image" />
-  </div>
+    <div v-else>
+      <img :src="image"/>
+
+    </div>
+
 </div>
 
 <style>
-  #app {
+  #inline {
     text-align: center;
   }
 
@@ -41,7 +43,7 @@
 
 <script>
   new Vue({
-    el: '#app',
+    el: '#inline',
     data: {
       image: ''
     },
@@ -54,12 +56,13 @@
             circle: true,
             rotate: true
           },
+          displayMode: "inline",
+          container: "#inline",
           onFileUploadFinished: (res) => {
             console.log(res.url);  // valid cdn!
             image:  res.url;  //nope
             console.log(data.image); // nada
-
-          }
+          },
 
         };
         client.picker(options).open();
