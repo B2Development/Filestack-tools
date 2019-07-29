@@ -1,21 +1,12 @@
-<script src="https://unpkg.com/vue"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
 <script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
 
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" rel="stylesheet" />
 
-<div id="app">
-  <div v-if="!image">
-    <button @click="selectImage">Select Image</button>
-  </div>
-  <div v-else>
-    <img :src="image" />
-  </div>
-</div>
+<div id="inline"></div>
 
 <style>
-  #app {
+  #inline {
     text-align: center;
   }
 
@@ -25,44 +16,25 @@
     display: block;
 }
 
-  button {
-    color: white;
-    font-weight: bold;
-    padding: 1rem;
-    background-color: coral;
-    border-radius: .3rem;
-    text-align: center;
-    width: 15%;
-    border: solid;
-    display: inline-block;
-  }
 </style>
 
 <script>
-  new Vue({
-    el: '#app',
-    data: {
-      image: ''
+  const client = filestack.init('Ae4imGQj1Tgmc1sMsNhoOz');
+  const options = {
+    transformations: {
+      crop: true,
+      circle: true,
+      rotate: true
     },
-    methods: {
-      selectImage: function(e) {
-        const client = filestack.init('Ae4imGQj1Tgmc1sMsNhoOz');
-        const options = {
-          transformations: {
-            crop: true,
-            circle: true,
-            rotate: true
-          },
-          onFileUploadFinished: (res) => {
-            console.log(res.url);  // valid cdn!
-            image:  res.url;  //nope
-            console.log(data.image); // nada
+    displayMode: "inline",
+    container: "#inline",
+    onFileUploadFinished: (res) => {
+      console.log(res.url);  // valid cdn!
+      image:  res.url;  //nope
+      console.log(data.image); // nada
+    },
 
-          }
+  };
+  client.picker(options).open();
 
-        };
-        client.picker(options).open();
-      },
-    }
-  })
 </script>
